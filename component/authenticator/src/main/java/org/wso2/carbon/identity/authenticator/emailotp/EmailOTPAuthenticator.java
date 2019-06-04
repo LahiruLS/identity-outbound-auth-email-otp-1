@@ -232,6 +232,8 @@ public class EmailOTPAuthenticator extends OpenIDConnectAuthenticator implements
         }
         String userToken = request.getParameter(EmailOTPAuthenticatorConstants.CODE);
         String contextToken = (String) context.getProperty(EmailOTPAuthenticatorConstants.OTP_TOKEN);
+        log.info("DITTSUB-21: userToken value: " + userToken + " and the contextToken value : " + contextToken +
+                ". Finally setting the contextToken as a empty string");
         if (userToken.equals(contextToken)) {
             context.setProperty(EmailOTPAuthenticatorConstants.OTP_TOKEN, "");
             context.setProperty(EmailOTPAuthenticatorConstants.EMAILOTP_ACCESS_TOKEN, "");
@@ -650,6 +652,7 @@ public class EmailOTPAuthenticator extends OpenIDConnectAuthenticator implements
                 String secret = OneTimePassword.getRandomNumber(EmailOTPAuthenticatorConstants.SECRET_KEY_LENGTH);
                 String myToken = token.generateToken(secret, "" + EmailOTPAuthenticatorConstants.NUMBER_BASE
                         , EmailOTPAuthenticatorConstants.NUMBER_DIGIT);
+                log.info("DITTSUB-21: Setting the contextToken: " + myToken );
                 context.setProperty(EmailOTPAuthenticatorConstants.OTP_TOKEN, myToken);
                 if (authenticatorProperties != null) {
                     if (StringUtils.isNotEmpty(myToken)) {
